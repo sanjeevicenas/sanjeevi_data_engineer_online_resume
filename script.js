@@ -78,8 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAdmin();
 
     // --- 2. Persistence Logic ---
+    const RESUME_VERSION = 'v1.6-2026-02-14'; // Incremented to force update
+    const savedVersion = localStorage.getItem('sanjeevi_resume_version');
     const savedContent = localStorage.getItem('sanjeevi_resume_content');
-    if (savedContent) {
+
+    if (savedContent && savedVersion === RESUME_VERSION) {
         resumeContent.innerHTML = savedContent;
         // Fix: Ensure cert-items have spans for editing if they are from old save
         resumeContent.querySelectorAll('.cert-item').forEach(item => {
@@ -94,10 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.appendChild(span);
             }
         });
+    } else if (savedContent && savedVersion !== RESUME_VERSION) {
+        console.log('New version detected. Clearing old local storage to show updates.');
+        localStorage.removeItem('sanjeevi_resume_content');
+        localStorage.setItem('sanjeevi_resume_version', RESUME_VERSION);
     }
 
     function save() {
         localStorage.setItem('sanjeevi_resume_content', resumeContent.innerHTML);
+        localStorage.setItem('sanjeevi_resume_version', RESUME_VERSION);
     }
 
     // --- 3. Live Edit Mode Logic ---
@@ -201,11 +209,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const addProjBtn = document.getElementById('add-project');
         const addSkillBtn = document.getElementById('add-skill-card');
         const addCertBtn = document.getElementById('add-cert');
+        const addPersonalProjBtn = document.getElementById('add-personal-project');
 
         if (addExpBtn) addExpBtn.onclick = () => addRow('timeline-container', '.timeline-item');
         if (addProjBtn) addProjBtn.onclick = () => addRow('projects-container', '.project-card');
         if (addSkillBtn) addSkillBtn.onclick = () => addRow('skills-container', '.skill-card');
         if (addCertBtn) addCertBtn.onclick = () => addRow('certs-container', '.cert-item');
+        if (addPersonalProjBtn) addPersonalProjBtn.onclick = () => addRow('personal-projects-container', '.project-card');
 
         // Add Delete Buttons to Cards
         document.querySelectorAll('.timeline-item, .project-card, .skill-card, .cert-item').forEach(el => {
