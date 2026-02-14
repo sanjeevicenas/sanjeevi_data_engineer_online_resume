@@ -319,8 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
     downloadBtn.addEventListener('click', () => {
         // Direct download of the file placed in the project folder
         const link = document.createElement('a');
-        link.href = './sanjeevi_azure_data_engineer.pdf';
-        link.download = 'sanjeevi_azure_data_engineer.pdf';
+        link.href = './sanjeevi_data_engineer.pdf';
+        link.download = 'sanjeevi_data_engineer.pdf';
         link.click();
     });
 
